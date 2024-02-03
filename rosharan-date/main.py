@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Self
 
 
 @dataclass(frozen=True)
@@ -35,6 +36,26 @@ class RosharanDate:
             raise ValueError(f"Day must be at least {RosharanDate.MIN_DAY}, but was {self.day}")
         if self.day > RosharanDate.MAX_DAY:
             raise ValueError(f"Day must not exceed {RosharanDate.MAX_DAY}, but was {self.day}")
+
+    @classmethod
+    def from_name(cls, *, name: str, year: int) -> Self:
+        # From https://stormlightarchive.fandom.com/wiki/Calendar:
+        # #     Name    Suffix
+        # 1     Jes     es
+        # 2     Nan     an
+        # 3     Chach   ach
+        # 4     Vev     ev
+        # 5     Palah   ah
+        # 6     Shash   ash
+        # 7     Betab   ab
+        # 8     Kak     ak
+        # 9     Tanat   at
+        # 10    Ishi    ish
+
+        # todo
+        # get what the name starts with
+        # chop it and do it again, but with suffixes
+        pass
 
 
 if __name__ == "__main__":
