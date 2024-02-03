@@ -38,7 +38,12 @@ class RosharanDate:
             raise ValueError(f"Day must not exceed {RosharanDate.MAX_DAY}, but was {self.day}")
 
     @classmethod
-    def from_name(cls, *, name: str, year: int) -> Self:
+    def from_name(
+        cls,
+        *,
+        name: str,
+        year: int,
+    ) -> Self:
         # From https://stormlightarchive.fandom.com/wiki/Calendar:
         # #     Name    Suffix
         # 1     Jes     es
@@ -55,7 +60,24 @@ class RosharanDate:
         # todo
         # get what the name starts with
         # chop it and do it again, but with suffixes
+        # chop it and do it again, but with suffixes
         pass
+
+    @classmethod
+    def from_names(
+        cls,
+        *,
+        day: int,
+        month_name: str,
+        week_name: str,
+        year: int,
+    ) -> Self:
+        pass
+
+    def __str__(self) -> str:
+        return f"{self.year}.{self.month}.{self.week}.{self.day}"
+
+    # todo: eq, comparators
 
 
 if __name__ == "__main__":
@@ -66,7 +88,7 @@ if __name__ == "__main__":
         day=4,
     )
 
-    print(date.year)
+    print(date)
 
     date = RosharanDate(
         year=1171,
