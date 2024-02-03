@@ -16,7 +16,7 @@ NUMBERS: List[RosharanNumber] = [
         value=index + 1,
     )
     # From https://stormlightarchive.fandom.com/wiki/Calendar:
-    for index, (name, suffix) in [
+    for index, (name, suffix) in enumerate([
         ("Jes", "es"),
         ("Nan", "an"),
         ("Chach", "ach"),
@@ -27,7 +27,7 @@ NUMBERS: List[RosharanNumber] = [
         ("Kak", "ak"),
         ("Tanat", "at"),
         ("Ishi", "ish"),
-    ]
+    ])
 ]
 
 NUMBERS_BY_VALUE: Mapping[int, RosharanNumber] = {
@@ -86,15 +86,35 @@ class RosharanDate:
         name: str,
         year: int,
     ) -> Self:
-        # todo
-        # get what the name starts with
         for number in NUMBERS:
             if name.startswith(number.name):
-                month = number.value
+                month_number = number
+                break
+        else:
+            raise ValueError(f"Expected name to start with month name, but was {name}")
 
-        # chop it and do it again, but with suffixes
-        # chop it and do it again, but with suffixes
-        pass
+        monthless_name = name[len(month_number.name):]
+        for number in NUMBERS:
+            if monthless_name.startswith(number.suffix):
+                week_number = number
+                break
+        else:
+            raise ValueError(f"Expected name to contain valid week suffix, but was {name}")
+
+        day_name = monthless_name[len(week_number.suffix):]
+        for number in NUMBERS:
+            if day_name == number.suffix:
+                day_number = number
+                break
+        else:
+            raise ValueError(f"Expected name to contain valid day suffix, but was {name}")
+
+        return cls(
+            year=year,
+            month=month_number.value,
+            week=week_number.value,
+            day=day_number.value,
+        )
 
     @classmethod
     def from_names(
@@ -115,18 +135,19 @@ class RosharanDate:
 
 
 if __name__ == "__main__":
-    date = RosharanDate(
+    date = RosharanDate.from_name(
+        name="Chachanan",
         year=1171,
-        month=2,
-        week=3,
-        day=4,
     )
+    date2 = RosharanDate.from_name(
+        name="Jesachev",
+        year=1171,
+    )
+    # todo: figure out kaktach (should be kakatach)
+    # date3 = RosharanDate.from_name(
+    #     name="Kaktach",
+    #     year=1171,
+    # )
 
     print(date)
-
-    date = RosharanDate(
-        year=1171,
-        month=11,
-        week=3,
-        day=4,
-    )
+    print(date2)
