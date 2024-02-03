@@ -3,28 +3,44 @@ from typing import Self, Mapping, List
 
 
 @dataclass(frozen=True, kw_only=True)
-class RosharanMonth:
+class RosharanNumber:
     name: str
     suffix: str
+    value: int
 
 
-# From https://stormlightarchive.fandom.com/wiki/Calendar:
-MONTHS: List[RosharanMonth] = [
-    RosharanMonth(name="Jes", suffix="es"),
-    RosharanMonth(name="Nan", suffix="an"),
-    RosharanMonth(name="Chach", suffix="ach"),
-    RosharanMonth(name="Vev", suffix="ev"),
-    RosharanMonth(name="Palah", suffix="ah"),
-    RosharanMonth(name="Shash", suffix="ash"),
-    RosharanMonth(name="Betab", suffix="ab"),
-    RosharanMonth(name="Kak", suffix="ak"),
-    RosharanMonth(name="Tanat", suffix="at"),
-    RosharanMonth(name="Ishi", suffix="ish"),
+NUMBERS: List[RosharanNumber] = [
+    RosharanNumber(
+        name=name,
+        suffix=suffix,
+        value=index + 1,
+    )
+    # From https://stormlightarchive.fandom.com/wiki/Calendar:
+    for index, (name, suffix) in [
+        ("Jes", "es"),
+        ("Nan", "an"),
+        ("Chach", "ach"),
+        ("Vev", "ev"),
+        ("Palah", "ah"),
+        ("Shash", "ash"),
+        ("Betab", "ab"),
+        ("Kak", "ak"),
+        ("Tanat", "at"),
+        ("Ishi", "ish"),
+    ]
 ]
 
-MONTHS_BY_NUMBER: Mapping[int, RosharanMonth] = {
-    index + 1: month
-    for index, month in enumerate(MONTHS)
+NUMBERS_BY_VALUE: Mapping[int, RosharanNumber] = {
+    number.value: number
+    for number in NUMBERS
+}
+NUMBERS_BY_NAME: Mapping[str, RosharanNumber] = {
+    number.name: number
+    for number in NUMBERS
+}
+NUMBERS_BY_SUFFIX: Mapping[str, RosharanNumber] = {
+    number.suffix: number
+    for number in NUMBERS
 }
 
 
@@ -70,21 +86,12 @@ class RosharanDate:
         name: str,
         year: int,
     ) -> Self:
-        # From https://stormlightarchive.fandom.com/wiki/Calendar:
-        # #     Name    Suffix
-        # 1     Jes     es
-        # 2     Nan     an
-        # 3     Chach   ach
-        # 4     Vev     ev
-        # 5     Palah   ah
-        # 6     Shash   ash
-        # 7     Betab   ab
-        # 8     Kak     ak
-        # 9     Tanat   at
-        # 10    Ishi    ish
-
         # todo
         # get what the name starts with
+        for number in NUMBERS:
+            if name.startswith(number.name):
+                month = number.value
+
         # chop it and do it again, but with suffixes
         # chop it and do it again, but with suffixes
         pass
@@ -104,6 +111,7 @@ class RosharanDate:
         return f"{self.year}.{self.month}.{self.week}.{self.day}"
 
     # todo: eq, comparators
+    # todo: different format printers
 
 
 if __name__ == "__main__":
