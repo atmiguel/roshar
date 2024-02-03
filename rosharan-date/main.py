@@ -1,5 +1,31 @@
 from dataclasses import dataclass
-from typing import Self
+from typing import Self, Mapping, List
+
+
+@dataclass(frozen=True, kw_only=True)
+class RosharanMonth:
+    name: str
+    suffix: str
+
+
+# From https://stormlightarchive.fandom.com/wiki/Calendar:
+MONTHS: List[RosharanMonth] = [
+    RosharanMonth(name="Jes", suffix="es"),
+    RosharanMonth(name="Nan", suffix="an"),
+    RosharanMonth(name="Chach", suffix="ach"),
+    RosharanMonth(name="Vev", suffix="ev"),
+    RosharanMonth(name="Palah", suffix="ah"),
+    RosharanMonth(name="Shash", suffix="ash"),
+    RosharanMonth(name="Betab", suffix="ab"),
+    RosharanMonth(name="Kak", suffix="ak"),
+    RosharanMonth(name="Tanat", suffix="at"),
+    RosharanMonth(name="Ishi", suffix="ish"),
+]
+
+MONTHS_BY_NUMBER: Mapping[int, RosharanMonth] = {
+    index + 1: month
+    for index, month in enumerate(MONTHS)
+}
 
 
 @dataclass(frozen=True)
