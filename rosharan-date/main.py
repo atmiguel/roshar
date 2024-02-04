@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Self, Mapping, List
+from functools import total_ordering
+from typing import List, Mapping, Self
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -38,12 +39,9 @@ NUMBERS_BY_NAME: Mapping[str, RosharanNumber] = {
     number.name: number
     for number in NUMBERS
 }
-NUMBERS_BY_SUFFIX: Mapping[str, RosharanNumber] = {
-    number.suffix: number
-    for number in NUMBERS
-}
 
 
+@total_ordering
 @dataclass(frozen=True)
 class RosharanDate:
     year: int
@@ -140,6 +138,13 @@ class RosharanDate:
             day=day,
         )
 
+    def get_day_name(self) -> str:
+        month_number = NUMBERS_BY_VALUE[self.month]
+        week_number = NUMBERS_BY_VALUE[self.week]
+        day_number = NUMBERS_BY_VALUE[self.day]
+
+        return f"{month_number.name}{week_number.suffix}{day_number.suffix}"
+
     def __str__(self) -> str:
         return f"{self.year}.{self.month}.{self.week}.{self.day}"
 
@@ -158,24 +163,14 @@ class RosharanDate:
 
         return True
 
-    # todo: comparators
-    # todo: different format printers
+    def __lt__(self, other: Self) -> bool:
+        if self.year != other.year:
+            return self.year < other.year
 
+        if self.month != other.month:
+            return self.month < other.month
 
-if __name__ == "__main__":
-    date = RosharanDate.from_name(
-        name="Chachanan",
-        year=1171,
-    )
-    date2 = RosharanDate.from_name(
-        name="Jesachev",
-        year=1171,
-    )
-    date3 = RosharanDate.from_name(
-        name="Shashahes",
-        year=1171,
-    )
+        if self.week != other.week:
+            return self.week < other.week
 
-    print(date)
-    print(date2)
-    print(date3)
+        return self.day < other.day
