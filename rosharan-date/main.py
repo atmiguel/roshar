@@ -125,12 +125,40 @@ class RosharanDate:
         week_name: str,
         year: int,
     ) -> Self:
-        pass
+        month_number = NUMBERS_BY_NAME.get(month_name)
+        if month_number is None:
+            raise ValueError(f"Expected valid month name, but was {month_name}")
+
+        week_number = NUMBERS_BY_NAME.get(week_name)
+        if week_number is None:
+            raise ValueError(f"Expected valid week name, but was {week_name}")
+
+        return cls(
+            year=year,
+            month=month_number.value,
+            week=week_number.value,
+            day=day,
+        )
 
     def __str__(self) -> str:
         return f"{self.year}.{self.month}.{self.week}.{self.day}"
 
-    # todo: eq, comparators
+    def __eq__(self, other: Self) -> bool:
+        if self.year != other.year:
+            return False
+
+        if self.month != other.month:
+            return False
+
+        if self.week != other.week:
+            return False
+
+        if self.day != other.day:
+            return False
+
+        return True
+
+    # todo: comparators
     # todo: different format printers
 
 
@@ -143,11 +171,11 @@ if __name__ == "__main__":
         name="Jesachev",
         year=1171,
     )
-    # todo: figure out kaktach (should be kakatach)
-    # date3 = RosharanDate.from_name(
-    #     name="Kaktach",
-    #     year=1171,
-    # )
+    date3 = RosharanDate.from_name(
+        name="Shashahes",
+        year=1171,
+    )
 
     print(date)
     print(date2)
+    print(date3)
