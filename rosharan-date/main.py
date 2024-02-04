@@ -146,6 +146,9 @@ class RosharanDate:
         months: Optional[int] = None,
         years: Optional[int] = None,
     ) -> Self:
+        if all(v is None for v in (days, weeks, months, years)):
+            raise ValueError("must specify at least one value")
+
         if days is None:
             days = 0
         elif days <= 0:
@@ -179,6 +182,58 @@ class RosharanDate:
 
         carryover_years = (total_months - 1) // RosharanDate.MAX_MONTH
         new_year = self.year + years + carryover_years
+
+        return RosharanDate(
+            year=new_year,
+            month=new_month,
+            week=new_week,
+            day=new_day,
+        )
+
+    def minus(
+        self,
+        *,
+        days: Optional[int] = None,
+        weeks: Optional[int] = None,
+        months: Optional[int] = None,
+        years: Optional[int] = None,
+    ) -> Self:
+        if all(v is None for v in (days, weeks, months, years)):
+            raise ValueError("must specify at least one value")
+
+        if days is None:
+            days = 0
+        elif days <= 0:
+            raise ValueError("days must be positive")
+
+        if weeks is None:
+            weeks = 0
+        elif weeks <= 0:
+            raise ValueError("weeks must be positive")
+
+        if months is None:
+            months = 0
+        elif months <= 0:
+            raise ValueError("months must be positive")
+
+        if years is None:
+            years = 0
+        elif years <= 0:
+            raise ValueError("years must be positive")
+
+        total_days = self.day - days
+        new_day = (total_days - 1) % RosharanDate.MAX_DAY + 1
+
+        carryover_weeks = (total_days - 1) // RosharanDate.MAX_DAY
+        total_weeks = self.week - weeks + carryover_weeks
+        new_week = (total_weeks - 1) % RosharanDate.MAX_WEEK + 1
+
+        carryover_months = (total_weeks - 1) // RosharanDate.MAX_WEEK
+        total_months = self.month - months + carryover_months
+        new_month = (total_months - 1) % RosharanDate.MAX_MONTH + 1
+
+        carryover_years = (total_months - 1) // RosharanDate.MAX_MONTH
+        new_year = self.year - years + carryover_years
 
         return RosharanDate(
             year=new_year,
@@ -229,12 +284,12 @@ if __name__ == "__main__":
     date = RosharanDate(1171, 6, 5, 1)
 
     print(date)
-    print(date.plus(days=3))
-    print(date.plus(days=4))
-    print(date.plus(days=5))
-    print(date.plus(days=10))
-    print(date.plus(weeks=2))
-    print(date.plus(days=29))
-    print(date.plus(days=30))
-    print(date.plus(days=500))
-    print(date.plus(years=1, days=1))
+    print(date.minus(days=1))
+    print(date.minus(days=4))
+    print(date.minus(days=7))
+    print(date.minus(days=10))
+    print(date.minus(weeks=2))
+    print(date.minus(days=29))
+    print(date.minus(days=30))
+    print(date.minus(days=500))
+    print(date.minus(years=1, days=1))
