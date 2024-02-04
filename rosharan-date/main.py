@@ -78,26 +78,26 @@ class RosharanDate:
             raise ValueError(f"day must not exceed {RosharanDate.MAX_DAY}")
 
     @classmethod
-    def from_name(
+    def from_day_name(
         cls,
         *,
-        name: str,
+        day_name: str,
         year: int,
     ) -> Self:
         for number in NUMBERS:
-            if name.startswith(number.name):
+            if day_name.startswith(number.name):
                 month_number = number
                 break
         else:
-            raise ValueError("expected name to start with month name")
+            raise ValueError("expected day_name to start with month name")
 
-        monthless_name = name[len(month_number.name):]
+        monthless_name = day_name[len(month_number.name):]
         for number in NUMBERS:
             if monthless_name.startswith(number.suffix):
                 week_number = number
                 break
         else:
-            raise ValueError("expected name to have week suffix following month name")
+            raise ValueError("expected day_name to have week suffix following month name")
 
         day_name = monthless_name[len(week_number.suffix):]
         for number in NUMBERS:
@@ -105,7 +105,7 @@ class RosharanDate:
                 day_number = number
                 break
         else:
-            raise ValueError("expected name to end with day suffix")
+            raise ValueError("expected day_name to end with day suffix")
 
         return cls(
             year=year,
@@ -241,6 +241,14 @@ class RosharanDate:
             week=new_week,
             day=new_day,
         )
+
+    def get_month_name(self) -> str:
+        month_number = NUMBERS_BY_VALUE[self.month]
+        return month_number.name
+
+    def get_week_name(self) -> str:
+        week_number = NUMBERS_BY_VALUE[self.week]
+        return week_number.name
 
     def get_day_name(self) -> str:
         month_number = NUMBERS_BY_VALUE[self.month]
