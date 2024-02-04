@@ -278,18 +278,3 @@ class RosharanDate:
             return self.week < other.week
 
         return self.day < other.day
-
-
-if __name__ == "__main__":
-    date = RosharanDate(1171, 6, 5, 1)
-
-    print(date)
-    print(date.minus(days=1))
-    print(date.minus(days=4))
-    print(date.minus(days=7))
-    print(date.minus(days=10))
-    print(date.minus(weeks=2))
-    print(date.minus(days=29))
-    print(date.minus(days=30))
-    print(date.minus(days=500))
-    print(date.minus(years=1, days=1))
