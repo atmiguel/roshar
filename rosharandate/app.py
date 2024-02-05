@@ -17,7 +17,7 @@ def create_integer_input(
     min: Optional[int] = None,
 ) -> int:
     return st.number_input(
-        label,
+        label=label,
         max_value=max,
         min_value=min,
         step=1,
@@ -49,6 +49,12 @@ def get_input_date() -> RosharanDate:
             max=RosharanDate.MAX_WEEK,
             min=RosharanDate.MIN_WEEK,
         )
+
+        week_name = st.selectbox(
+            "Week Name",
+            ("Shash", "Palah"),
+        )
+        print(week_name)
 
     with columns[3]:
         day = create_integer_input(

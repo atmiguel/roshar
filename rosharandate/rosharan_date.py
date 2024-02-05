@@ -1,44 +1,11 @@
 from dataclasses import dataclass
 from functools import total_ordering
-from typing import List, Mapping, Optional, Self
-
-
-@dataclass(frozen=True, kw_only=True)
-class RosharanNumber:
-    name: str
-    suffix: str
-    value: int
-
-
-NUMBERS: List[RosharanNumber] = [
-    RosharanNumber(
-        name=name,
-        suffix=suffix,
-        value=index + 1,
-    )
-    # From https://stormlightarchive.fandom.com/wiki/Calendar:
-    for index, (name, suffix) in enumerate([
-        ("Jes", "es"),
-        ("Nan", "an"),
-        ("Chach", "ach"),
-        ("Vev", "ev"),
-        ("Palah", "ah"),
-        ("Shash", "ash"),
-        ("Betab", "ab"),
-        ("Kak", "ak"),
-        ("Tanat", "at"),
-        ("Ishi", "ish"),
-    ])
-]
-
-NUMBERS_BY_VALUE: Mapping[int, RosharanNumber] = {
-    number.value: number
-    for number in NUMBERS
-}
-NUMBERS_BY_NAME: Mapping[str, RosharanNumber] = {
-    number.name: number
-    for number in NUMBERS
-}
+from typing import Optional, Self
+from rosharandate.rosharan_number import (
+    ROSHARAN_NUMBERS_BY_NAME,
+    ROSHARAN_NUMBERS_BY_VALUE,
+    ROSHARAN_NUMBERS,
+)
 
 
 @total_ordering
@@ -84,7 +51,7 @@ class RosharanDate:
         day_name: str,
         year: int,
     ) -> Self:
-        for number in NUMBERS:
+        for number in ROSHARAN_NUMBERS:
             if day_name.startswith(number.name):
                 month_number = number
                 break
@@ -92,7 +59,7 @@ class RosharanDate:
             raise ValueError("expected day_name to start with month name")
 
         monthless_name = day_name[len(month_number.name):]
-        for number in NUMBERS:
+        for number in ROSHARAN_NUMBERS:
             if monthless_name.startswith(number.suffix):
                 week_number = number
                 break
@@ -100,7 +67,7 @@ class RosharanDate:
             raise ValueError("expected day_name to have week suffix following month name")
 
         day_name = monthless_name[len(week_number.suffix):]
-        for number in NUMBERS:
+        for number in ROSHARAN_NUMBERS:
             if day_name == number.suffix:
                 day_number = number
                 break
@@ -123,11 +90,11 @@ class RosharanDate:
         week_name: str,
         year: int,
     ) -> Self:
-        month_number = NUMBERS_BY_NAME.get(month_name)
+        month_number = ROSHARAN_NUMBERS_BY_NAME.get(month_name)
         if month_number is None:
             raise ValueError("expected valid month name")
 
-        week_number = NUMBERS_BY_NAME.get(week_name)
+        week_number = ROSHARAN_NUMBERS_BY_NAME.get(week_name)
         if week_number is None:
             raise ValueError("expected valid week name")
 
@@ -243,17 +210,17 @@ class RosharanDate:
         )
 
     def get_month_name(self) -> str:
-        month_number = NUMBERS_BY_VALUE[self.month]
+        month_number = ROSHARAN_NUMBERS_BY_VALUE[self.month]
         return month_number.name
 
     def get_week_name(self) -> str:
-        week_number = NUMBERS_BY_VALUE[self.week]
+        week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
         return week_number.name
 
     def get_day_name(self) -> str:
-        month_number = NUMBERS_BY_VALUE[self.month]
-        week_number = NUMBERS_BY_VALUE[self.week]
-        day_number = NUMBERS_BY_VALUE[self.day]
+        month_number = ROSHARAN_NUMBERS_BY_VALUE[self.month]
+        week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
+        day_number = ROSHARAN_NUMBERS_BY_VALUE[self.day]
 
         return f"{month_number.name}{week_number.suffix}{day_number.suffix}"
 
