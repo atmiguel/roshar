@@ -1,41 +1,36 @@
-from dataclasses import dataclass
-from typing import List, Mapping
+from enum import Enum
+from typing import Mapping
 
 
-@dataclass(frozen=True, kw_only=True)
-class RosharanNumber:
-    name: str
-    suffix: str
-    value: int
+class RosharanNumber(Enum):
+    def __new__(cls, *args):
+        value = len(cls.__members__) + 1
+        obj = object.__new__(cls)
+        obj._value_ = value
+        return obj
 
+    def __init__(self, suffix):
+        self.suffix = suffix
 
-ROSHARAN_NUMBERS: List[RosharanNumber] = [
-    RosharanNumber(
-        name=name,
-        suffix=suffix,
-        value=index + 1,
-    )
     # From https://stormlightarchive.fandom.com/wiki/Calendar:
-    for index, (name, suffix) in enumerate([
-        ("Jes", "es"),
-        ("Nan", "an"),
-        ("Chach", "ach"),
-        ("Vev", "ev"),
-        ("Palah", "ah"),
-        ("Shash", "ash"),
-        ("Betab", "ab"),
-        ("Kak", "ak"),
-        ("Tanat", "at"),
-        ("Ishi", "ish"),
-    ])
-]
+    Jes = "es"
+    Nan = "an"
+    Chach = "ach"
+    Vev = "ev"
+    Palah = "ah"
+    Shash = "ash"
+    Betab = "ab"
+    Kak = "ak"
+    Tanat = "at"
+    Ishi = "ish"
+
 
 ROSHARAN_NUMBERS_BY_VALUE: Mapping[int, RosharanNumber] = {
     number.value: number
-    for number in ROSHARAN_NUMBERS
+    for number in RosharanNumber
 }
 
 ROSHARAN_NUMBERS_BY_NAME: Mapping[str, RosharanNumber] = {
     number.name: number
-    for number in ROSHARAN_NUMBERS
+    for number in RosharanNumber
 }

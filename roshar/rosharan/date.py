@@ -4,7 +4,7 @@ from typing import Optional, Self
 from roshar.rosharan.number import (
     ROSHARAN_NUMBERS_BY_NAME,
     ROSHARAN_NUMBERS_BY_VALUE,
-    ROSHARAN_NUMBERS,
+    RosharanNumber,
 )
 
 
@@ -51,7 +51,7 @@ class RosharanDate:
         day_name: str,
         year: int,
     ) -> Self:
-        for number in ROSHARAN_NUMBERS:
+        for number in RosharanNumber:
             if day_name.startswith(number.name):
                 month_number = number
                 break
@@ -59,7 +59,7 @@ class RosharanDate:
             raise ValueError("expected day_name to start with month name")
 
         monthless_name = day_name[len(month_number.name):]
-        for number in ROSHARAN_NUMBERS:
+        for number in RosharanNumber:
             if monthless_name.startswith(number.suffix):
                 week_number = number
                 break
@@ -67,7 +67,7 @@ class RosharanDate:
             raise ValueError("expected day_name to have week suffix following month name")
 
         day_name = monthless_name[len(week_number.suffix):]
-        for number in ROSHARAN_NUMBERS:
+        for number in RosharanNumber:
             if day_name == number.suffix:
                 day_number = number
                 break
