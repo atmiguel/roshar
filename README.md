@@ -7,6 +7,12 @@ Run setup script:
 bash setup.sh
 ```
 
+To start streamlit app:
+```bash
+poetry shell
+streamlit run roshar/app/index.py
+```
+
 ## RosharanDate
 
 ### Constructor
