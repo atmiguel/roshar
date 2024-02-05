@@ -1,6 +1,7 @@
 import streamlit as st
 
 from roshar.rosharan.date import RosharanDate
+from roshar.rosharan.number import RosharanNumber
 from typing import Optional
 
 
@@ -43,6 +44,7 @@ def get_input_date() -> RosharanDate:
         )
 
     with columns[2]:
+        # TODO: on change that pairs inputs together
         week = create_integer_input(
             default=DEFAULT_DATE.week,
             label="Week",
@@ -50,9 +52,10 @@ def get_input_date() -> RosharanDate:
             min=RosharanDate.MIN_WEEK,
         )
 
+        # TODO: on change that pairs inputs together
         week_name = st.selectbox(
             "Week Name",
-            ("Shash", "Palah"),
+            [number.name for number in RosharanNumber],
         )
         print(week_name)
 
@@ -76,4 +79,7 @@ if __name__ == "__main__":
     st.title("Rosharan Date")
 
     input_date = get_input_date()
+    # todo: display different names about the date
     print(input_date)
+
+    # todo: fix week name in rosharan date
