@@ -1,6 +1,6 @@
 import streamlit as st
 
-from rosharandate.rosharan_date import RosharanDate
+from roshar.rosharan.date import RosharanDate
 from typing import Optional
 
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import total_ordering
 from typing import Optional, Self
-from rosharandate.rosharan_number import (
+from roshar.rosharan.number import (
     ROSHARAN_NUMBERS_BY_NAME,
     ROSHARAN_NUMBERS_BY_VALUE,
     ROSHARAN_NUMBERS,
