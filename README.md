@@ -1,4 +1,4 @@
-# Rosharan Date
+# Roshar 
 
 ## Get Started
 
@@ -7,7 +7,7 @@ Run setup script:
 bash setup.sh
 ```
 
-## Usage
+## RosharanDate
 
 ### Constructor
 
@@ -89,6 +89,6 @@ print(date1 < date2) # True
 print(date1 > date2) # False
 ```
 
-## Source
+## Sources
 
 https://stormlightarchive.fandom.com/wiki/Calendar
