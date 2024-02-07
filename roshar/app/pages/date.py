@@ -1,23 +1,19 @@
 import streamlit as st
 
 from roshar.rosharan.date import RosharanDate
-from roshar.rosharan.number import RosharanNumber
 from typing import Optional
 
 
-# From https://roshar.17thshard.com/#/en-US/events/kaladin-joins-bridge-four:
-# 1173.7.9.3 - Kaladin joins Bridge Four
-DEFAULT_DATE = RosharanDate(1173, 7, 9, 3)
-
-
-def create_integer_input(
+def display_integer_input(
     *,
     default: int,
+    key: Optional[str] = None,
     label: str,
     max: Optional[int] = None,
     min: Optional[int] = None,
 ) -> int:
     return st.number_input(
+        key=key,
         label=label,
         max_value=max,
         min_value=min,
@@ -26,18 +22,18 @@ def create_integer_input(
     )
 
 
-def get_input_date() -> RosharanDate:
+def display_date_input(*, initial_date: RosharanDate) -> RosharanDate:
     columns = st.columns(4)
 
     with columns[0]:
-        year = create_integer_input(
-            default=DEFAULT_DATE.year,
+        year = display_integer_input(
+            default=initial_date.year,
             label="Year",
         )
 
     with columns[1]:
-        month = create_integer_input(
-            default=DEFAULT_DATE.month,
+        month = display_integer_input(
+            default=initial_date.month,
             label="Month",
             max=RosharanDate.MAX_MONTH,
             min=RosharanDate.MIN_MONTH,
@@ -45,23 +41,23 @@ def get_input_date() -> RosharanDate:
 
     with columns[2]:
         # TODO: on change that pairs inputs together
-        week = create_integer_input(
-            default=DEFAULT_DATE.week,
+        week = display_integer_input(
+            default=initial_date.week,
             label="Week",
             max=RosharanDate.MAX_WEEK,
             min=RosharanDate.MIN_WEEK,
         )
 
-        # TODO: on change that pairs inputs together
-        week_name = st.selectbox(
-            "Week Name",
-            [number.name for number in RosharanNumber],
-        )
-        print(week_name)
+        # # TODO: on change that pairs inputs together
+        # st.selectbox(
+        #     label="Week Name",
+        #     options=[number.name for number in RosharanNumber],
+        #     index=week - 1,
+        # )
 
     with columns[3]:
-        day = create_integer_input(
-            default=DEFAULT_DATE.day,
+        day = display_integer_input(
+            default=initial_date.day,
             label="Day",
             max=RosharanDate.MAX_DAY,
             min=RosharanDate.MIN_DAY,
@@ -78,8 +74,12 @@ def get_input_date() -> RosharanDate:
 if __name__ == "__main__":
     st.title("Rosharan Date")
 
-    input_date = get_input_date()
-    # todo: display different names about the date
-    print(input_date)
+    # From https://roshar.17thshard.com/#/en-US/events/kaladin-joins-bridge-four:
+    # 1173.7.9.3 - Kaladin joins Bridge Four
+    initial_date = RosharanDate(1173, 7, 9, 3)
+    date = display_date_input(initial_date=initial_date)
 
-    # todo: fix week name in rosharan date
+    st.write(f"Date id: {date}")
+    st.write(f"Month name: {date.get_month_name()}")
+    st.write(f"Week name: {date.get_week_name()}")
+    st.write(f"Day name: {date.get_day_name()}")
