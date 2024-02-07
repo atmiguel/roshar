@@ -8,6 +8,7 @@ from roshar.rosharan.number import (
 )
 
 
+# TODO: handle weird names like Jesnan and Kaktash
 @total_ordering
 @dataclass(frozen=True)
 class RosharanDate:
@@ -44,6 +45,7 @@ class RosharanDate:
         if self.day > RosharanDate.MAX_DAY:
             raise ValueError(f"day must not exceed {RosharanDate.MAX_DAY}")
 
+    # TODO: construct a map of day names to tuples
     @classmethod
     def from_day_name(
         cls,
@@ -215,32 +217,22 @@ class RosharanDate:
 
     def get_week_name(self) -> str:
         week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
-        return week_number.name
+        return f"{self.get_month_name()}{week_number.suffix}"
 
     def get_day_name(self) -> str:
-        month_number = ROSHARAN_NUMBERS_BY_VALUE[self.month]
-        week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
         day_number = ROSHARAN_NUMBERS_BY_VALUE[self.day]
-
-        return f"{month_number.name}{week_number.suffix}{day_number.suffix}"
+        return f"{self.get_week_name()}{day_number.suffix}"
 
     def __str__(self) -> str:
         return f"{self.year}.{self.month}.{self.week}.{self.day}"
 
     def __eq__(self, other: Self) -> bool:
-        if self.year != other.year:
-            return False
-
-        if self.month != other.month:
-            return False
-
-        if self.week != other.week:
-            return False
-
-        if self.day != other.day:
-            return False
-
-        return True
+        return (
+            self.year == other.year and
+            self.month == other.month and
+            self.week == other.week and
+            self.day == other.day
+        )
 
     def __lt__(self, other: Self) -> bool:
         if self.year != other.year:
