@@ -11,7 +11,6 @@ from roshar.rosharan.number import (
 )
 
 
-# TODO: handle weird names like Jesnan and Kaktash
 @total_ordering
 @dataclass(frozen=True)
 class RosharanDate:
@@ -218,6 +217,10 @@ class RosharanDate:
         return month_number.name
 
     def get_week_name(self) -> str:
+        if (self.month, self.week) == (1, 2):
+            # Found in TWoK Chapter 4
+            return "Jesnan"
+
         week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
         return f"{self.get_month_name()}{week_number.suffix}"
 
