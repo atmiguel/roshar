@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from functools import total_ordering
-from typing import Optional, Self
+from typing import Optional, Self, Mapping, Tuple, Any
+from roshar.rosharan.constants import (
+    DATE_VALUES_BY_DAY_NAME,
+    DATE_VALUES_BY_WEEK_NAME,
+)
 from roshar.rosharan.number import (
     ROSHARAN_NUMBERS_BY_NAME,
     ROSHARAN_NUMBERS_BY_VALUE,
-    RosharanNumber,
 )
 
 
@@ -45,7 +48,6 @@ class RosharanDate:
         if self.day > RosharanDate.MAX_DAY:
             raise ValueError(f"day must not exceed {RosharanDate.MAX_DAY}")
 
-    # TODO: construct a map of day names to tuples
     @classmethod
     def from_day_name(
         cls,
@@ -53,57 +55,57 @@ class RosharanDate:
         day_name: str,
         year: int,
     ) -> Self:
-        for number in RosharanNumber:
-            if day_name.startswith(number.name):
-                month_number = number
-                break
-        else:
-            raise ValueError("expected day_name to start with month name")
+        date_values = DATE_VALUES_BY_DAY_NAME.get(day_name)
+        if date_values is None:
+            raise ValueError("invalid day name")
 
-        monthless_name = day_name[len(month_number.name):]
-        for number in RosharanNumber:
-            if monthless_name.startswith(number.suffix):
-                week_number = number
-                break
-        else:
-            raise ValueError("expected day_name to have week suffix following month name")
-
-        day_name = monthless_name[len(week_number.suffix):]
-        for number in RosharanNumber:
-            if day_name == number.suffix:
-                day_number = number
-                break
-        else:
-            raise ValueError("expected day_name to end with day suffix")
+        month, week, day = date_values
 
         return cls(
             year=year,
-            month=month_number.value,
-            week=week_number.value,
-            day=day_number.value,
+            month=month,
+            week=week,
+            day=day,
         )
 
     @classmethod
-    def from_names(
+    def from_week_name(
+        cls,
+        *,
+        day: int,
+        week_name: str,
+        year: int,
+    ) -> Self:
+        date_values = DATE_VALUES_BY_WEEK_NAME.get(week_name)
+        if date_values is None:
+            raise ValueError("invalid week name")
+
+        month, week = date_values
+
+        return cls(
+            year=year,
+            month=month,
+            week=week,
+            day=day,
+        )
+
+    @classmethod
+    def from_month_name(
         cls,
         *,
         day: int,
         month_name: str,
-        week_name: str,
+        week: int,
         year: int,
     ) -> Self:
         month_number = ROSHARAN_NUMBERS_BY_NAME.get(month_name)
         if month_number is None:
-            raise ValueError("expected valid month name")
-
-        week_number = ROSHARAN_NUMBERS_BY_NAME.get(week_name)
-        if week_number is None:
-            raise ValueError("expected valid week name")
+            raise ValueError("invalid month name")
 
         return cls(
             year=year,
             month=month_number.value,
-            week=week_number.value,
+            week=week,
             day=day,
         )
 
@@ -245,3 +247,50 @@ class RosharanDate:
             return self.week < other.week
 
         return self.day < other.day
+
+
+def _get_all_day_names() -> Mapping[str, Tuple[int, int, int]]:
+    all_day_names = {}
+
+    for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
+        for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
+            for day in range(RosharanDate.MIN_DAY, RosharanDate.MAX_DAY + 1):
+                date = RosharanDate(
+                    year=1,
+                    month=month,
+                    week=week,
+                    day=day,
+                )
+
+                all_day_names[date.get_day_name()] = (month, week, day)
+
+    return all_day_names
+
+
+def _get_all_week_names() -> Mapping[str, Tuple[int, int]]:
+    all_week_names = {}
+
+    for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
+        for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
+            date = RosharanDate(
+                year=1,
+                month=month,
+                week=week,
+                day=1,
+            )
+
+            all_week_names[date.get_week_name()] = (month, week)
+
+    return all_week_names
+
+
+def _print_mapping(mapping: Mapping[str, Any], /) -> None:
+    print("{")
+    for key, value in mapping.items():
+        print(f"    \"{key}\": {value},")
+    print("}")
+
+
+if __name__ == "__main__":
+    _print_mapping(_get_all_day_names())
+    _print_mapping(_get_all_week_names())
