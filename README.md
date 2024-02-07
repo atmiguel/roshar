@@ -28,18 +28,25 @@ RosharanDate(
 # or shorthand
 RosharanDate(1171, 6, 5, 1)
 
-# or using month and week names
-RosharanDate.from_names(
-    year=1171,
-    month_name="Shash",
-    week_name="Palah",
-    day=1,
-)
-
 # or using day name
 RosharanDate.from_day_name(
     year=1171,
     day_name="Shashahes",
+)
+
+# or using week name
+RosharanDate.from_week_name(
+    year=1171,
+    week_name="Shashah",
+    day=1,
+)
+
+# or using month name
+RosharanDate.from_month_name(
+    year=1171,
+    month_name="Shash",
+    week=5,
+    day=1,
 )
 ```
 
