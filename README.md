@@ -87,7 +87,7 @@ date = RosharanDate(1171, 6, 5, 1)
 
 print(date) # 1171.6.5.1
 print(date.get_month_name()) # Shash
-print(date.get_week_name()) # Palah
+print(date.get_week_name()) # Shashah
 print(date.get_day_name()) # Shashahes
 ```
 
