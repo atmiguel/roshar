@@ -217,9 +217,13 @@ class RosharanDate:
         return month_number.name
 
     def get_week_name(self) -> str:
-        if (self.month, self.week) == (1, 2):
-            # Found in TWoK Chapter 4
-            return "Jesnan"
+        match (self.month, self.week):
+            case (1, 2):
+                # Found in TWoK Chapter 4
+                return "Jesnan"
+            case (10, 6):
+                # Found in TWoK Chapter 8
+                return "Ishash"
 
         week_number = ROSHARAN_NUMBERS_BY_VALUE[self.week]
         return f"{self.get_month_name()}{week_number.suffix}"
