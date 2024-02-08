@@ -3,15 +3,6 @@ from enum import Enum
 
 # From https://coppermind.net/wiki/Spheres#Value
 class RosharanGemSize(Enum):
-    def __new__(cls, *args):
-        value = len(cls.__members__) + 1
-        obj = object.__new__(cls)
-        obj._value_ = value
-        return obj
-
-    def __init__(self, weight: int) -> None:
-        self.weight = weight
-
     CHIP = 1
     MARK = 5
     BROAM = 20
@@ -20,10 +11,10 @@ class RosharanGemSize(Enum):
 # From https://coppermind.net/wiki/Spheres#Value
 class RosharanGemTier(Enum):
     CHEAPEST = 1
-    LESS_WEIGHT = 2
-    MIDDLE_WEIGHT = 3
-    PRIME_PAIR = 4
-    HIGHEST = 5
+    LESS_WEIGHT = 5
+    MIDDLE_WEIGHT = 10
+    PRIME_PAIR = 25
+    HIGHEST = 50
 
 
 # From https://coppermind.net/wiki/Spheres#Value
@@ -64,6 +55,7 @@ class RosharanSphere(Enum):
     ) -> None:
         self.gem_type = gem_type
         self.gem_size = gem_size
+        self.clearchips = gem_type.tier.value * gem_size.value
 
     AMETHYST_CHIP = RosharanGemType.AMETHYST, RosharanGemSize.CHIP
     AMETHYST_MARK = RosharanGemType.AMETHYST, RosharanGemSize.MARK
