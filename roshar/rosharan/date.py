@@ -6,8 +6,8 @@ from roshar.rosharan.constants import (
     DATE_VALUES_BY_WEEK_NAME,
 )
 from roshar.rosharan.number import (
-    ROSHARAN_NUMBERS_BY_NAME,
     ROSHARAN_NUMBERS_BY_VALUE,
+    ROSHARAN_NUMBERS_BY_VORIN_NAME,
 )
 
 
@@ -97,7 +97,7 @@ class RosharanDate:
         week: int,
         year: int,
     ) -> Self:
-        month_number = ROSHARAN_NUMBERS_BY_NAME.get(month_name)
+        month_number = ROSHARAN_NUMBERS_BY_VORIN_NAME.get(month_name)
         if month_number is None:
             raise ValueError("invalid month name")
 
@@ -214,7 +214,7 @@ class RosharanDate:
 
     def get_month_name(self) -> str:
         month_number = ROSHARAN_NUMBERS_BY_VALUE[self.month]
-        return month_number.name
+        return month_number.vorin_name
 
     def get_week_name(self) -> str:
         match (self.month, self.week):
