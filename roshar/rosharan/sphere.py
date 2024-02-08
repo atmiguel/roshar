@@ -10,10 +10,19 @@ from typing import Mapping
 
 
 # From https://coppermind.net/wiki/Spheres#Value
-class RosharanGemSize(str, Enum):
-    BROAM = "broam"
-    CHIP = "chip"
-    MARK = "mark"
+class RosharanGemSize(Enum):
+    def __new__(cls, *args):
+        value = len(cls.__members__) + 1
+        obj = object.__new__(cls)
+        obj._value_ = value
+        return obj
+
+    def __init__(self, weight: int) -> None:
+        self.weight = weight
+
+    CHIP = 1
+    MARK = 5
+    BROAM = 20
 
 
 # From https://coppermind.net/wiki/Spheres#Value
@@ -26,7 +35,7 @@ class RosharanGemTier(Enum):
 
 
 # From https://coppermind.net/wiki/Spheres#Value
-class RosharanGemType(str, Enum):
+class RosharanGemType(Enum):
     def __new__(cls, *args):
         value = len(cls.__members__) + 1
         obj = object.__new__(cls)
