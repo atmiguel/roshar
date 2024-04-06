@@ -74,6 +74,8 @@ def display_date_input(*, initial_date: RosharanDate) -> RosharanDate:
 if __name__ == "__main__":
     st.title("Rosharan Date")
 
+    # TODO(adrian@gradient.ai, 04/05/2024): make a selector to choose how dates will be entered
+
     # From https://roshar.17thshard.com/#/en-US/events/kaladin-joins-bridge-four:
     # 1173.7.9.3 - Kaladin joins Bridge Four
     initial_date = RosharanDate(1173, 7, 9, 3)
