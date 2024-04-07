@@ -290,6 +290,22 @@ class RosharanDate:
 
         return all_week_names
 
+    @staticmethod
+    def list_all_month_names() -> Mapping[str, int]:
+        all_month_names = {}
+
+        for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
+            date = RosharanDate(
+                year=1,
+                month=month,
+                week=1,
+                day=1,
+            )
+
+            all_month_names[date.get_month_name()] = month
+
+        return all_month_names
+
 
 def _print_mapping(mapping: Mapping[str, Any], /) -> None:
     print("{")
