@@ -255,40 +255,40 @@ class RosharanDate:
 
         return self.day < other.day
 
+    @staticmethod
+    def list_all_day_names() -> Mapping[str, Tuple[int, int, int]]:
+        all_day_names = {}
 
-def _get_all_day_names() -> Mapping[str, Tuple[int, int, int]]:
-    all_day_names = {}
+        for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
+            for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
+                for day in range(RosharanDate.MIN_DAY, RosharanDate.MAX_DAY + 1):
+                    date = RosharanDate(
+                        year=1,
+                        month=month,
+                        week=week,
+                        day=day,
+                    )
 
-    for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
-        for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
-            for day in range(RosharanDate.MIN_DAY, RosharanDate.MAX_DAY + 1):
+                    all_day_names[date.get_day_name()] = (month, week, day)
+
+        return all_day_names
+
+    @staticmethod
+    def list_all_week_names() -> Mapping[str, Tuple[int, int]]:
+        all_week_names = {}
+
+        for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
+            for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
                 date = RosharanDate(
                     year=1,
                     month=month,
                     week=week,
-                    day=day,
+                    day=1,
                 )
 
-                all_day_names[date.get_day_name()] = (month, week, day)
+                all_week_names[date.get_week_name()] = (month, week)
 
-    return all_day_names
-
-
-def _get_all_week_names() -> Mapping[str, Tuple[int, int]]:
-    all_week_names = {}
-
-    for month in range(RosharanDate.MIN_MONTH, RosharanDate.MAX_MONTH + 1):
-        for week in range(RosharanDate.MIN_WEEK, RosharanDate.MAX_WEEK + 1):
-            date = RosharanDate(
-                year=1,
-                month=month,
-                week=week,
-                day=1,
-            )
-
-            all_week_names[date.get_week_name()] = (month, week)
-
-    return all_week_names
+        return all_week_names
 
 
 def _print_mapping(mapping: Mapping[str, Any], /) -> None:
@@ -299,5 +299,5 @@ def _print_mapping(mapping: Mapping[str, Any], /) -> None:
 
 
 if __name__ == "__main__":
-    _print_mapping(_get_all_day_names())
-    _print_mapping(_get_all_week_names())
+    _print_mapping(RosharanDate.list_all_day_names())
+    _print_mapping(RosharanDate.list_all_week_names())

@@ -74,12 +74,41 @@ def display_date_input(*, initial_date: RosharanDate) -> RosharanDate:
 if __name__ == "__main__":
     st.title("Rosharan Date")
 
-    # TODO(adrian@gradient.ai, 04/05/2024): make a selector to choose how dates will be entered
-
     # From https://roshar.17thshard.com/#/en-US/events/kaladin-joins-bridge-four:
     # 1173.7.9.3 - Kaladin joins Bridge Four
     initial_date = RosharanDate(1173, 7, 9, 3)
-    date = display_date_input(initial_date=initial_date)
+
+    # TODO(adrian@gradient.ai, 04/05/2024): make a selector to choose how dates will be entered
+    period_name = st.selectbox(
+        label="Name",
+        options=["Day", "Week", "Month"],
+    )
+
+    match period_name:
+        case "Day":
+            year = display_integer_input(
+                default=initial_date.year,
+                key="day_name_year",
+                label="Year",
+            )
+
+            day_names = list(RosharanDate.list_all_day_names().keys())
+            day_name = st.selectbox(
+                label="Day Name",
+                options=day_names,
+                index=day_names.index(initial_date.get_day_name()),
+            )
+
+            date = RosharanDate.from_day_name(
+                day_name=day_name,
+                year=year,
+            )
+        case "Week":
+            pass
+        case "Month":
+            pass
+        case _:
+            raise Exception(f"period_name unexpected: {period_name}")
 
     st.write(f"Date id: {date}")
     st.write(f"Month name: {date.get_month_name()}")
