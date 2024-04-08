@@ -317,3 +317,4 @@ def _print_mapping(mapping: Mapping[str, Any], /) -> None:
 if __name__ == "__main__":
     _print_mapping(RosharanDate.list_all_day_names())
     _print_mapping(RosharanDate.list_all_week_names())
+    # TODO: Kakatach fits the pattern, but Kaktach is in Book 1: Chapter 66 epigraph
